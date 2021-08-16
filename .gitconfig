@@ -1,0 +1,73 @@
+[user]
+	name = Guillaume Lagorce
+	email = guillaume@hey-gul.com
+[branch]
+	autosetuprebase = always
+[push]
+	default = upstream
+
+[core]
+	excludesfile = ~/dotfiles/.gitignore_global
+
+[diff]
+  tool = vimdiff
+  noprefix = true
+
+[difftool]
+  # qa: Move to next set of diffs
+  # cq: Exit with error code and stop
+  trustExitCode = true
+  prompt = false
+
+[credential]
+	helper = osxkeychain
+
+[alias]
+	br = branch
+	ci = commit
+	di = diff
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+	co = checkout
+	aa = add --all
+  	local-branches = !git branch -vv | grep ': gone]' | awk '{print $1}'
+	rm-local-br = !git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
+	it = !git init && git commit -m “root” --allow-empty
+	root = status && cd `git rev-parse --show-toplevel | awk '{print $1}'`
+	up = pull --rebase --autostash
+	pushf = push --force-with-lease
+	hub = !hub
+[color]
+	ui = auto
+  branch = auto
+  status = auto
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[color "branch"]
+    current = white reverse
+    local = white
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[fetch]
+	prune = true
+[rerere]
+	enabled = true
+[commit]
+	template = ~/dotfiles/.stCommitMsg
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main
