@@ -134,6 +134,7 @@ alias pix:captains='open -n -a "Google Chrome" --args "https://meet.google.com/z
 # Colorize files
 alias cat=ccat
 alias less=cless
+alias cowfortune='fortune | cowsay -f $(ls /usr/local/Cellar/cowsay/3.04_1/share/cows/ | gshuf -n 1)'
 
 export PATH="/usr/local/sbin:$PATH"
 
