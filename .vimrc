@@ -43,6 +43,7 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
+Plug 'NLKNguyen/papercolor-theme'
 " Initialize plugin system
 call plug#end()
 
@@ -199,6 +200,7 @@ autocmd Filetype typescript setlocal suffixesadd+=.ts
 autocmd Filetype typescript setlocal tabstop=2
 autocmd Filetype typescript setlocal shiftwidth=2
 autocmd Filetype typescript setlocal softtabstop=2
+autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 
 autocmd Filetype javascript setlocal suffixesadd+=.js
 autocmd Filetype javascript setlocal tabstop=2
@@ -246,3 +248,17 @@ nmap - <Plug>(qf_previous_file)
 nmap _ <Plug>(qf_next_file)
 nmap <C-@>  <Plug>(qf_qf_next)
 nmap <C-#> <Plug>(qf_qf_previous)
+
+"remove all trailing whitespaces with a command
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+
+command! TrimWhitespace call TrimWhitespace()
+:noremap <Leader>w :call TrimWhitespace()<CR>
+
+"fzf settings
+" - Popup window (anchored to the bottom of the current window)
+let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.3, 'relative': v:true, 'yoffset': 1.0 } }
