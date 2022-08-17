@@ -1,2 +1,6 @@
 set main-view-author-display = no
 set main-view-date-display = no
+
+bind generic 0 !@sh -c "git show -s --format=%s %(commit) | pbcopy" 
+bind generic 1 !@sh -c "git rev-parse --short %(commit) | pbcopy"
+
