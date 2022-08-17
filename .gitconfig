@@ -5,6 +5,7 @@
 	autosetuprebase = always
 [push]
 	default = upstream
+	autoSetupRemote = true
 
 [core]
 	excludesfile = ~/dotfiles/.gitignore_global
@@ -71,3 +72,7 @@
 	rebase = true
 [init]
 	defaultBranch = main
+[interactive]
+	singleKey = true
+[help]
+	autocorrect = 5
