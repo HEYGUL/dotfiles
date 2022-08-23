@@ -134,9 +134,6 @@ alias pix:meet='open -n -a "Google Chrome" --args "https://meet.google.com/?hs=1
 alias pix:wsm='open -n -a "Google Chrome" --args "https://meet.google.com/nys-usxm-ptn?pli=1&authuser=guillaume.lagorce@pix.fr"'
 alias pix:captains='open -n -a "Google Chrome" --args "https://meet.google.com/zfq-oezm-wwd?pli=1&authuser=guillaume.lagorce@pix.fr"'
 
-# Colorize files
-alias cat=ccat
-alias less=cless
 alias cowfortune='fortune | cowsay -f $(ls /usr/local/Cellar/cowsay/3.04_1/share/cows/ | gshuf -n 1)'
 
 export PATH="/usr/local/sbin:$PATH"
