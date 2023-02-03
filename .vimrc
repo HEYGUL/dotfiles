@@ -9,43 +9,40 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'luochen1990/rainbow' " Rainbow Parentheses
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'pangloss/vim-javascript'
-Plug 'crusoexia/vim-javascript-lib'
-Plug 'Raimondi/delimitMate'
-Plug 'Shougo/neocomplcache'
+Plug 'Shougo/ddc.vim'
+Plug 'vim-denops/denops.vim'
 Plug 'vim-scripts/vim-auto-save'
 Plug 'w0rp/ale'
-Plug 'tpope/vim-surround'
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'tpope/vim-eunuch'
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'preservim/nerdcommenter'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'crusoexia/vim-monokai'
+Plug 'bluz71/vim-nightfly-colors'
 Plug 'ap/vim-buftabline'
 Plug 'romainl/vim-qf'
 Plug 'romgrk/winteract.vim'
 Plug 'drmingdrmer/vim-tabbar'
 Plug 'andymass/vim-matchup'
 Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'jparise/vim-graphql'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sheerun/vim-polyglot'
 " Initialize plugin system
 call plug#end()
+
+let $BASH_ENV = "~/dotfiles/.bash_aliases"
 
 " Use <C-A> to clear the highlighting of :set hlsearch.
 if maparg('<C-A>', 'n') ==# ''
@@ -53,8 +50,7 @@ if maparg('<C-A>', 'n') ==# ''
 endif
 
 set termguicolors
-colorscheme monokai
-set background=dark
+colorscheme nightfly
 set noantialias
 
 set splitbelow
@@ -65,32 +61,32 @@ set hidden
 nnoremap <C-$> :bnext<CR>
 nnoremap <C-*> :bprev<CR>
 
-nmap <leader>w :InteractiveWindow<CR>
-
-map <leader><leader> <Plug>(easymotion-prefix)
-
 " Automatically source vimrc on save.
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+hi SpecialKey ctermfg=66 guifg=#649A9A
+set listchars=tab:→\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 
-let g:auto_save = 1  " enable AutoSave on Vim startup
+" vim-svelte-plugin 
+let g:vim_svelte_plugin_use_typescript = 1
 
 "Airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = "deus"
+let g:airline#extensions#ale#enabled = 1
 
 "look for per directory .exrc files
 set exrc
 
 " tell vim to keep a backup file
 set backup
-
 " tell vim where to put its backup files
-set backupdir=/private/tmp
-
+set backupdir=/private/tmp//
 " tell vim where to put swap files
-set dir=/private/tmp
+set dir=/private/tmp//
+set directory=/private/tmp//
+set undodir=/private/tmp//
 
 set nocp "http://www.guckes.net/vim/setup.html
 
@@ -117,12 +113,14 @@ nmap <leader>hn <Plug>(GitGutterNextHunk)
 nmap <leader>hN <Plug>(GitGutterPrevHunk)
 nmap <Leader>hs <Plug>(GitGutterStageHunk)
 nmap <Leader>hu <Plug>(GitGutterUndoHunk)
+nmap <F4> :pclose<CR>
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+let g:coc_node_path = '/Users/GUL/.nvm/versions/node/v16.17.0/bin/node'
 
 "folds
 set foldmethod=syntax
@@ -138,37 +136,34 @@ let sh_fold_enabled=1         " sh
 let vimsyn_folding='af'       " Vim script
 let xml_syntax_folding=1      " XML
 
-let g:neocomplcache_auto_completion_start_length = 3
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_max_list = 5
-let g:neocomplcache_enable_insert_char_pre = 1
+let g:ale_fixers = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'javascript': ['eslint', 'prettier'],
+      \ 'typescript': ['eslint', 'prettier'],
+      \ 'python': ['black', 'isort']
+      \ }
 
-let g:ale_fixers = { 'javascript': ['eslint'] }
-let g:ale_linters = { 'javascript': ['eslint'] }
-
+let g:ale_linters = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'javascript': ['eslint', 'prettier'],
+      \ 'typescript': ['eslint', 'prettier'],
+      \ 'python': ['black', 'isort']
+      \ }
 let g:auto_save = 1
 let g:auto_save_in_insert_mode = 0
 let g:netrw_liststyle = 3
-
-let g:rainbow_active = 1
 
 set mouse=a
 set number
 set title
 syntax on
-"Highlight trailing whitespaces
-autocmd Syntax * syn match TrailingWhitespace /\s\+$/
-autocmd Syntax * highlight def link TrailingWhitespace Error
-"Remove trailing whitespaces for certain files when saving
-autocmd FileType css,sass,scss,html,hbs,c,cpp,java,javascript,php,groovy,tf,typescript autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " indenting http://tedlogan.com/techblog3.html
 set expandtab "hitting tab insert spaces instead of <Tab>
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set nowrap " kikoo (lol)"
+set nowrap
 
 noremap <silent> <S-PageDown> <Esc>:tabm +1<CR>
 noremap <silent> <S-PageUp> <Esc>:tabm -1<CR>
@@ -184,8 +179,29 @@ nnoremap <silent> <C-Down> :.m+<CR>
 "bouger la ligne vers le haut
 nnoremap <silent> <C-Up> :-m.<CR>k
 
-set grepprg=rg\ --vimgrep\ --sort-files\ --max-columns\ 120
+" set grepprg=rg\ --vimgrep\ --sort-files\ --max-columns\ 120
+" set grepformat=%f:%l:%c:%m,%f:%l:%m
+" ack.vim --- {{{
 
+" Use ripgrep for searching ⚡️
+" Options include:
+" --vimgrep -> Needed to parse the rg response properly for ack.vim
+" --type-not sql -> Avoid huge sql file dumps as it slows down the search
+" --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+
+" Do not auto close the Quickfix list after pressing '<enter>' on a list item
+let g:ack_autoclose = 0
+
+" Any empty ack search will search for the work the cursor is on
+let g:ack_use_cword_for_empty_search = 1
+
+" Don't jump to first match
+cnoreabbrev Ack Ack!
+
+" Maps <leader>s so we're ready to type the search keyword
+nnoremap <Leader>s :Ack!<Space>
+" }}}
 set wildignore+=.git
 set wildignore+=node_modules
 set wildignore+=dist
@@ -195,6 +211,7 @@ set wildignore+=tmp
 set relativenumber
 
 autocmd Filetype markdown setlocal wrap
+autocmd Filetype csv setlocal wrap
 
 autocmd Filetype typescript setlocal suffixesadd+=.ts
 autocmd Filetype typescript setlocal tabstop=2
@@ -213,11 +230,8 @@ autocmd Filetype yaml setlocal tabstop=2
 autocmd Filetype yaml setlocal shiftwidth=2
 autocmd Filetype yaml setlocal softtabstop=2
 
-set nobackup
 set nocompatible
-set noswapfile
 set nowrap
-set nowritebackup
 
 :au FocusLost * silent! wa
 
@@ -231,6 +245,9 @@ nmap <leader>e :Explore<CR>
 nmap <leader>f :ALEFix<CR>
 nmap <leader>n :ALENext<CR>
 vmap <leader>c "*y
+nmap <leader>c "*y
+vmap <leader>p "*p
+nmap <leader>p "*p
 
 nmap <leader>t :let lastTestFile=expand('%')<CR>:make %<CR>
 nmap <leader>l :execute ':make ' . lastTestFile<CR>
@@ -241,6 +258,32 @@ highlight GitGutterChange ctermfg=yellow
 highlight GitGutterDelete ctermfg=red
 highlight GitGutterChangeDelete ctermfg=yellow
 
+" vim-unimpared
+nmap + [
+nmap - ]
+omap + [
+omap - ]
+xmap + [
+xmap - ]
+
+" CoC mappings
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gI <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
 "vim-qf mappings
 nmap <F5> <Plug>(qf_qf_toggle)
 nmap ç <Plug>(qf_qf_switch)
@@ -249,15 +292,7 @@ nmap _ <Plug>(qf_next_file)
 nmap <C-@>  <Plug>(qf_qf_next)
 nmap <C-#> <Plug>(qf_qf_previous)
 
-"remove all trailing whitespaces with a command
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    keeppatterns %s/\s\+$//e
-    call winrestview(l:save)
-endfun
-
-command! TrimWhitespace call TrimWhitespace()
-:noremap <Leader>w :call TrimWhitespace()<CR>
+autocmd QuickFixCmdPost *grep* cwindow
 
 "fzf settings
 " - Popup window (anchored to the bottom of the current window)
