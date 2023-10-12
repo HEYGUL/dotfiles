@@ -1,5 +1,5 @@
-alias zshconfig="vi ~/.zshrc"
-alias ohmyzsh="vi ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias garcon="wakeonlan 00:11:32:8D:F7:7A"
 
 # Carnet de bord aliases

@@ -1,4 +1,4 @@
-nnoremap <leader>v :tabedit $MYVIMRC<cr>
+noremap <leader>v :tabedit $MYVIMRC<cr>
 
 set diffopt+=vertical
 
@@ -18,13 +18,14 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'editorconfig/editorconfig-vim'
+" Plug 'konfekt/vim-DetectSpellLang'
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'Shougo/ddc.vim'
 Plug 'vim-denops/denops.vim'
-Plug 'vim-scripts/vim-auto-save'
 Plug 'w0rp/ale'
+Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdcommenter'
 Plug 'vim-airline/vim-airline'
@@ -37,8 +38,12 @@ Plug 'drmingdrmer/vim-tabbar'
 Plug 'andymass/vim-matchup'
 Plug 'leafgarland/typescript-vim'
 Plug 'NLKNguyen/papercolor-theme'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
+Plug 'neovim/nvim-lspconfig'
+Plug 'ThePrimeagen/refactoring.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Initialize plugin system
 call plug#end()
 
@@ -51,7 +56,6 @@ endif
 
 set termguicolors
 colorscheme nightfly
-set noantialias
 
 set splitbelow
 set splitright
@@ -66,7 +70,7 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 hi SpecialKey ctermfg=66 guifg=#649A9A
 set listchars=tab:→\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 
-" vim-svelte-plugin 
+" vim-svelte-plugin
 let g:vim_svelte_plugin_use_typescript = 1
 
 "Airline
@@ -140,18 +144,29 @@ let g:ale_fixers = {
       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
       \ 'javascript': ['eslint', 'prettier'],
       \ 'typescript': ['eslint', 'prettier'],
-      \ 'python': ['black', 'isort']
+      \ 'python': ['ruff', 'black', 'remove_trailing_lines'],
+      \ 'elm': ['elm-format'],
       \ }
 
 let g:ale_linters = {
       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
       \ 'javascript': ['eslint', 'prettier'],
       \ 'typescript': ['eslint', 'prettier'],
-      \ 'python': ['black', 'isort']
+      \ 'python': ['ruff', 'black'],
+      \ 'elm': ['elm-ls', 'elm-format'],
       \ }
-let g:auto_save = 1
+let g:ale_elm_ls_use_global = 1
+let g:ale_fix_on_save = 1
 let g:auto_save_in_insert_mode = 0
+let g:ale_warn_about_trailing_blank_lines = 0
+let g:ale_warn_about_trailing_whitespace = 0
+let g:ale_use_neovim_diagnostics_api = 1
+
 let g:netrw_liststyle = 3
+" DetectSpellLang
+let g:detectspelllang_langs = {}
+let g:detectspelllang_langs.aspell = [ 'en' ]
+autocmd FileType text,markdown,mail setlocal spell
 
 set mouse=a
 set number
@@ -188,7 +203,8 @@ nnoremap <silent> <C-Up> :-m.<CR>k
 " --vimgrep -> Needed to parse the rg response properly for ack.vim
 " --type-not sql -> Avoid huge sql file dumps as it slows down the search
 " --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
-let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+" --no-heading -> Don’t group matches by each file.
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case --no-heading'
 
 " Do not auto close the Quickfix list after pressing '<enter>' on a list item
 let g:ack_autoclose = 0
@@ -198,6 +214,7 @@ let g:ack_use_cword_for_empty_search = 1
 
 " Don't jump to first match
 cnoreabbrev Ack Ack!
+cnoreabbrev ack Ack!
 
 " Maps <leader>s so we're ready to type the search keyword
 nnoremap <Leader>s :Ack!<Space>
@@ -208,7 +225,7 @@ set wildignore+=dist
 set wildignore+=coverage
 set wildignore+=tmp
 
-set relativenumber
+set norelativenumber
 
 autocmd Filetype markdown setlocal wrap
 autocmd Filetype csv setlocal wrap
@@ -241,7 +258,8 @@ nmap <leader>g :GFiles<CR>
 nmap <leader>H :History<CR>
 nmap <leader>: :History:<CR>
 nmap <leader>/ :History/<CR>
-nmap <leader>e :Explore<CR>
+nmap <leader>e :NERDTreeToggle<CR>
+nmap <leader>E :NERDTreeFind<CR>
 nmap <leader>f :ALEFix<CR>
 nmap <leader>n :ALENext<CR>
 vmap <leader>c "*y
@@ -251,6 +269,8 @@ nmap <leader>p "*p
 
 nmap <leader>t :let lastTestFile=expand('%')<CR>:make %<CR>
 nmap <leader>l :execute ':make ' . lastTestFile<CR>
+
+set signcolumn=yes
 
 highlight clear SignColumn
 highlight GitGutterAdd ctermfg=green
@@ -289,7 +309,7 @@ nmap <F5> <Plug>(qf_qf_toggle)
 nmap ç <Plug>(qf_qf_switch)
 nmap - <Plug>(qf_previous_file)
 nmap _ <Plug>(qf_next_file)
-nmap <C-@>  <Plug>(qf_qf_next)
+nmap <C-@> <Plug>(qf_qf_next)
 nmap <C-#> <Plug>(qf_qf_previous)
 
 autocmd QuickFixCmdPost *grep* cwindow
@@ -297,3 +317,86 @@ autocmd QuickFixCmdPost *grep* cwindow
 "fzf settings
 " - Popup window (anchored to the bottom of the current window)
 let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.3, 'relative': v:true, 'yoffset': 1.0 } }
+
+" LSP
+lua << EOF
+-----------------
+-- Refactoring --
+-----------------
+require('refactoring').setup({})
+-- Remaps for the refactoring operations currently offered by the plugin
+vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("v", "<leader>rf", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("v", "<leader>rv", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("v", "<leader>ri", [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+
+-- Extract block doesn't need visual mode
+vim.api.nvim_set_keymap("n", "<leader>rb", [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]], {noremap = true, silent = true, expr = false})
+vim.api.nvim_set_keymap("n", "<leader>rbf", [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]], {noremap = true, silent = true, expr = false})
+
+-- Inline variable can also pick up the identifier currently under the cursor without visual mode
+vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+---------
+-- LSP --
+---------
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  --Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'elmls', 'html', 'tsserver', 'rust-analyzer' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+
+" Expand %% to current file's work directory
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" Filetype specific settings
+augroup vimrc
+    autocmd BufNewFile,BufRead EDIT_PR_MSG_* setlocal filetype=gitcommit tw=0 spell
+    autocmd BufNewFile,BufRead neomutt-* setlocal spell
+    autocmd BufNewFile,BufRead *.html setlocal spell
+    autocmd BufNewFile,BufRead *.py setlocal spell foldlevel=3
+    autocmd BufNewFile,BufRead *.jsx? setlocal spell
+    autocmd BufNewFile,BufRead *.md,*.rst,*.txt setlocal spell suffixesadd=.rst
+    autocmd BufNewFile,BufRead *.snap setlocal syntax=html
+    autocmd BufNewFile,BufRead *.txt setlocal syntax=rst
+    autocmd BufNewFile,BufRead PKGBUILD setlocal noexpandtab sw=4 ts=4
+    autocmd BufNewFile,BufRead COMMIT_EDITMSG setlocal textwidth=72 spell
+    autocmd BufNewFile,BufRead PULLREQ_EDITMSG setlocal tw=0 spell
+augroup END
