@@ -71,8 +71,8 @@ HIST_STAMPS="dd.mm.yyyy"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 aliases
-zsh-autosuggestions
-zsh-syntax-highlighting
+# zsh-autosuggestions
+# zsh-syntax-highlighting
 gitfast
 colorize
 zsh-navigation-tools
