@@ -3,6 +3,9 @@
 	email = guillaume@hey-gul.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEbgzbyp4/4c6ajumuSQpsnDJmmCxE0CV/usOg4aBcAw
 
+[includeIf "gitdir:~/Developer/gip-pix/"]
+	path = ~/Developer/gip-pix/.gitconfig
+
 [branch]
 	autosetuprebase = always
 
@@ -12,7 +15,7 @@
 
 [core]
 	excludesfile = ~/dotfiles/.gitignore_global
-	pager = less -FX
+	pager = less
 	editor = nvim
 
 [diff]
@@ -75,6 +78,7 @@
 	defaultBranch = main
 [interactive]
 	singleKey = true
+	diffFilter = less
 [help]
 	autoCorrect = 5
 [rebase]

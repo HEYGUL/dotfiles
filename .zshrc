@@ -29,7 +29,7 @@ SPACESHIP_PROMPT_ORDER=(
   line_sep      # Line break
   char          # Prompt character
 )
-SPACESHIP_GIT_STATUS_SHOW="false"
+SPACESHIP_GIT_STATUS_SHOW="true"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -74,8 +74,8 @@ aliases
 # zsh-autosuggestions
 # zsh-syntax-highlighting
 gitfast
+git-extras
 colorize
-zsh-navigation-tools
 yarn
 brew
 asdf
@@ -86,21 +86,23 @@ asdf
 # aws
 # cask
 # history
-
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
+  
 # User configuration
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-export PATH="~/.rvm/gems/ruby-2.7.0/bin:$PATH"
+# export PATH="~/.rvm/gems/ruby-2.7.0/bin:$PATH"
 
-export GOPATH=~/Documents/SideProjects/go
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
+# export GOPATH=~/Documents/SideProjects/go
+# export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export TERMINAL_NOTIFIER_BIN=/usr/local/bin/terminal-notifier
 export PATH="/usr/local/bin:$PATH"
 
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-export PATH=~/Library/Android/sdk/tools:$PATH
-export PATH=~/Library/Android/sdk/platform-tools:$PATH
+# export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+# export PATH=~/Library/Android/sdk/tools:$PATH
+# export PATH=~/Library/Android/sdk/platform-tools:$PATH
 
 source $ZSH/oh-my-zsh.sh
 
@@ -125,8 +127,6 @@ export PATH="/usr/local/sbin:$PATH"
 TERM=xterm-256color
 source ~/.zsh/completion/scalingo_complete.zsh
 
-# Load Git completion
-# zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
 autoload -Uz compinit && compinit
@@ -152,3 +152,18 @@ export VISUAL="$EDITOR"
 # tabtab source for packages
 # uninstall by removing these lines
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+# pnpm
+export PNPM_HOME="/Users/GUL/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+autoload -U compinit
+compinit -i
+
+source <(fzf --zsh)
+export FZF_DEFAULT_OPTS="--height ~40% --layout reverse --border"
+
