@@ -72,7 +72,7 @@ HIST_STAMPS="dd.mm.yyyy"
 plugins=(
 aliases
 # zsh-autosuggestions
-# zsh-syntax-highlighting
+zsh-syntax-highlighting
 gitfast
 git-extras
 colorize
@@ -86,7 +86,7 @@ asdf
 # aws
 # cask
 # history
-export ZPLUG_HOME=/usr/local/opt/zplug
+export ZPLUG_HOME=$(brew --prefix)/opt/zplug
 source $ZPLUG_HOME/init.zsh
   
 # User configuration
@@ -121,7 +121,7 @@ setopt share_history
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="/usr/local/sbin:$PATH"
 
 TERM=xterm-256color
