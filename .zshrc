@@ -72,16 +72,16 @@ HIST_STAMPS="dd.mm.yyyy"
 plugins=(
 aliases
 # zsh-autosuggestions
-zsh-syntax-highlighting
+#zsh-syntax-highlighting
 gitfast
 git-extras
 colorize
 yarn
 brew
 asdf
+# jump
 )
 # brew
-# jump
 # yarn
 # aws
 # cask
@@ -144,7 +144,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source /Users/GUL/.config/op/plugins.sh
+# source /Users/GUL/.config/op/plugins.sh
 
 export EDITOR=nvim
 export VISUAL="$EDITOR"
@@ -167,3 +167,7 @@ compinit -i
 source <(fzf --zsh)
 export FZF_DEFAULT_OPTS="--height ~40% --layout reverse --border"
 
+eval "$(mise activate zsh)"
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
