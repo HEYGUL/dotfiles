@@ -1,10 +1,10 @@
 [user]
 	name = Guillaume Lagorce
 	email = guillaume@hey-gul.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEbgzbyp4/4c6ajumuSQpsnDJmmCxE0CV/usOg4aBcAw
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHyj8EpBurChGoP16HJZSYVUhWI+wu6Jw2E4T3FqNBgh
 
-[includeIf "gitdir:~/Developer/gip-pix/"]
-	path = ~/Developer/gip-pix/.gitconfig
+[includeIf "gitdir:~/Developer/1024pix/"]
+	path = ~/Developer/1024pix/.gitconfig
 
 [branch]
 	autosetuprebase = always
@@ -15,7 +15,7 @@
 
 [core]
 	excludesfile = ~/dotfiles/.gitignore_global
-	pager = less
+	pager = delta
 	editor = nvim
 
 [diff]
@@ -78,7 +78,7 @@
 	defaultBranch = main
 [interactive]
 	singleKey = true
-	diffFilter = less
+	diffFilter = delta --color-only
 [help]
 	autoCorrect = 5
 [rebase]
@@ -88,3 +88,7 @@
 	format = ssh
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[delta]
+	navigate = true
+[merge]
+	conflictStyle = zdiff3
