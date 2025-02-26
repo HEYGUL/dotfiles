@@ -78,14 +78,9 @@ git-extras
 colorize
 yarn
 brew
-asdf
-# jump
+autojump
+brew
 )
-# brew
-# yarn
-# aws
-# cask
-# history
 export ZPLUG_HOME=$(brew --prefix)/opt/zplug
 source $ZPLUG_HOME/init.zsh
   
@@ -167,7 +162,12 @@ compinit -i
 source <(fzf --zsh)
 export FZF_DEFAULT_OPTS="--height ~40% --layout reverse --border"
 
-eval "$(mise activate zsh)"
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+alias zshconfig="nvim ~/.zshrc"
+
+bindkey -e;
+bindkey '\e\e[C' forward-word;
+bindkey '\e\e[D' backward-word
+eval "$(mise activate zsh)"
